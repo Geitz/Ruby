@@ -8,11 +8,12 @@ class	Hashcash
 		ver = 1
 		now = Time.now()
 		ts = now.to_s
-		ts.gsub!("-", ':')
-		ts = ts[0, 19]
-		ts.gsub!(" ", ':')
+		ts.gsub!("-", '')
+		ts.gsub!(":", '')
+		ts = ts[2, 15]
+		ts.gsub!(" ", '')
 		puts "TIME = " + ts
-		challenge = ver.to_s + bits.to_s + ts + ressources + ext + _salt(saltchar)
+		challenge = ver.to_s + ":" + bits.to_s + ":" + ts + ":" + ressources + ":" + ext + ":" + _salt(saltchar)
     	return challenge + _mint(challenge, bits);
 	end
 
