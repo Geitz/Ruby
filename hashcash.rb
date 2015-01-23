@@ -2,7 +2,7 @@
 require 'digest/sha1'
 
 class	Hashcash
-	def mint(ressources, bits=20, now=nil, ext="", saltchar=8, stamp_seconds = true)
+	def mint(ressources, bits=15, now=nil, ext="", saltchar=16, stamp_seconds = true)
 		ts =""
 		challenge = ""
 		ver = 1
@@ -34,7 +34,6 @@ class	Hashcash
 			my_sha1 = 	Digest::SHA1.hexdigest (challenge+counter.to_s(16))
 			digest = my_sha1.to_s
 			if digest[0, hex_digits] == zeros
-				puts "----- digest is :" + digest
 				return counter.to_s(16)
 			else
 				counter += 1
@@ -45,9 +44,10 @@ end
 
 if __FILE__ == $0
 	mHashcash = Hashcash.new
-
-	msg = mHashcash.mint("test")
-	puts "mint final = " + msg
+	puts Time.now()
+	msg = mHashcash.mint("test", 15)
+	puts msg
+	puts Time.now()
 end
 
 
