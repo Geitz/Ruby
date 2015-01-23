@@ -11,8 +11,6 @@ class	Hashcash
 		ts.gsub!("-", '')
 		ts.gsub!(":", '')
 		ts = ts[2, 15]
-		ts.gsub!(" ", '')
-		puts "TIME = " + ts
 		challenge = ver.to_s + ":" + bits.to_s + ":" + ts + ":" + ressources + ":" + ext + ":" + _salt(saltchar)
     	return challenge + _mint(challenge, bits);
 	end
@@ -29,11 +27,12 @@ class	Hashcash
 		hex_digits = bits / 4
 		hex_digits = hex_digits.ceil
 		zeros = ""
-		hex_digits.times { zeros << "0"}
+		hex_digits.times { zeros << "0" }
 
 		while true
-			my_sha1 = 	Digest::SHA1.hexdigest (challenge+counter.to_s(16))
-			digest = my_sha1.to_s
+			my_sha1 = Digest::SHA1.hexdigest (challenge+counter.to_s(16))	
+			digest 	= my_sha1.to_s
+
 			if digest[0, hex_digits] == zeros
 				return counter.to_s(16)
 			else
