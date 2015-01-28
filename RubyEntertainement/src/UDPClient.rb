@@ -17,9 +17,7 @@ class UDPClient
   end
 
   def sendMsg(msg="empty message")
-    puts msg
     sock = UDPSocket.open
-
     sock.connect(@hostame, @port)
     sock.send(msg, @flag)
   end

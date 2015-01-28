@@ -2,6 +2,7 @@
 
 require 'socket'
 
+
 class UDPServer
 
   attr_accessor :port
@@ -15,11 +16,13 @@ class UDPServer
       sThread = Thread.start do    # run server in a thread
 
         server = UDPSocket.open
-        server.bind('localhost', 4242)
+        server.bind("0.0.0.0", 4242)
         #puts "Server waiting for message"
         msg = server.recvfrom(64)
-        p msg
-        if msg == "exit"
+        puts msg
+        f = File.new("IP_conf.txt", "w")
+        f.puts msg[1][2].to_s
+        if msg[0] == "exit"
           puts "TIME TO ESCAAAAAAPE"
           return -1
         end

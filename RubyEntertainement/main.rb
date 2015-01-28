@@ -17,7 +17,7 @@ if __FILE__ == $0
     udpServ.launchServer()
   end
 
-  client = UDPClient.new('localhost', 4242, 0)
+  client = UDPClient.new("127.0.0.1", 4242, 0)
   AT = Thread.start do
   client.sendMsg("exit")
   end
