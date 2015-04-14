@@ -3,7 +3,7 @@
 require 'socket'
 require 'ipaddr'
 require 'io/console'
-
+require_relative 'CustomSocket'
 ## FUNCTION GET_IP ##
 
 def getIP
@@ -49,23 +49,36 @@ i = 0
 ## BEGIN INITIALIZATION ##
 
 myArray = getIP                     ## IP IN MY_ARRAY ##
+
+@allSocket = []
+
+@allSocket.push(myArray[i], port, UDPSocket.new)
+
+
 socket = UDPSocket.new
 socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_BROADCAST, 1)
 ip = IPAddr.new(MULTICAST_ADDR).hton + IPAddr.new(myArray[1]).hton
 socket.setsockopt(Socket::IPPROTO_IP, Socket::IP_ADD_MEMBERSHIP, ip)
-
+##
+socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, true)
+##
 ## END OF INITIALIZATION ##
 ## BEGIN EXECUTION ##
 
-var = Binding('0.0.0.0', port, socket)
+
+
+  if myArray[i] == '127.0.0.1'
+    i += 1
+  end
+  var = Binding(myArray[i], port, socket)
+
 ## Exemple biding ---- Binding(myArray[i], port, socket)   ## if return 0 => success || return -1 => failed ##
 
 Th = Thread.start do                ## Thread who receives messages ##
-  message = socket.recvfrom(1024) ## Get message + sender's information ##
-puts 'log'
+  message = socket.recvfrom(1024)   ## Get message + sender's information ##
+
   while message[0] != 'quit' do
-    print 'Th waiting. var = '
-    puts var
+
     message = socket.recvfrom(1024) ## Get message + sender's information ##
     puts message[0]                 ## Print message + information on standard output ##
   end
@@ -76,10 +89,12 @@ loop do
   #print 'var = '
   #puts var
   if var == 0                       ## BINDING SUCCEED ##
-    msg = '[empty]'                 ## Initialize msg ##
+  #  msg = '[empty]'                 ## Initialize msg ##
     puts 'var = 0'                  ## Debug ##
-    msg = gets.chomp                ## Gets input -> Will be replace by listening to others msg (in a list ?) ##
-    socket.send(msg, 0, myArray[i].chomp, port) ## Send message ##
+
+    msg = myArray[i].to_s           ## send my IP ##
+    #msg = gets.chomp               ## Gets input -> Will be replace by listening to others msg (in a list ?) -> wait, nope.##
+    socket.send(msg, 0, myArray[i], port) ## Send message ##
   else                              ## ELSE = IF BINDING HAS FAILED ##
     if myArray[i + 1] == nil
       i = 0

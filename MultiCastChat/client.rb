@@ -16,7 +16,10 @@ rescue Errno::EADDRINUSE
 end
 
 sock.setsockopt(Socket::IPPROTO_IP, Socket::IP_ADD_MEMBERSHIP, membership)
-sock.send(ARGV[0], 0, MULTICAST_ADDR, LOCATOR_PORT)
+textSend = ""
+textSend = gets
+sock.send(textSend, 0, MULTICAST_ADDR, LOCATOR_PORT)
+
 
 
 loop do
