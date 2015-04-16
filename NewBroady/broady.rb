@@ -22,7 +22,7 @@ end
 
 if myArray[0] != '127.0.0.1'
   mAddress = myArray[0]
-elsif (myArray[0] == '127.0.0.1' and myArray[1] != nul )
+elsif (myArray[0] == '127.0.0.1' and myArray[1] != nil)
   mAddress = myArray[1]
 end
 
