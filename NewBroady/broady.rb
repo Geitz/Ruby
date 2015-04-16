@@ -31,6 +31,7 @@ end
 
 mFile = File.open('otherDevicesDiscovered.txt', 'w+') ## open a file or creates it ##
 mFile.puts('my address : ' + mAddress)
+ipArray << mAddress
 
 #################################
 
@@ -46,11 +47,12 @@ socket.setsockopt(:SOL_SOCKET, :SO_REUSEADDR, 1)
 socket.bind(BIND_ADDR, PORT)
 Th = Thread.start do
   loop do
-    message, _ = socket.recvfrom(255) ## POUR L INSTANT ON RECUP QUE LE MESSAGE, POSSIBILITÉ de récup + d'info en virant le '_
-    if (ipArray.include?(message) == FALSE)
-      puts 'received : ' + message
-      mFile.puts(message)
-      ipArray << message
+    message = socket.recvfrom(255) ## POUR L INSTANT ON RECUP QUE LE MESSAGE, POSSIBILITÉ de récup + d'info en virant le '_
+    #puts message[1][2].to_s
+    if (ipArray.include?(message[1][2].to_s) == FALSE)
+      puts message[1][2].to_s
+      mFile.puts(message[1][2].to_s)
+      ipArray << message[1][2].to_s
     else
       puts 'Already in the array'
     end
